@@ -1,0 +1,80 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 1rem 0;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  text-decoration: none;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+  color: var(--black);
+  margin: 0;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--dark-text);
+  transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+  color: var(--primary-red);
+}
+
+.reservation-btn {
+  padding: 0.5rem 1.2rem;
+  background-color: var(--primary-red);
+}
+
+.reservation-btn:hover {
+  background-color: #c42020; /* Darker red */
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .main-nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .reservation-btn {
+    margin-top: 0.5rem;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 50px;
+  width: auto;
+  margin-right: 10px;
+}

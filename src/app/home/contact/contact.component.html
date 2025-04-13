@@ -1,0 +1,141 @@
+<div class="container">
+  <div class="section-header text-center">
+    <h2>Contáctanos</h2>
+    <p class="subtitle">Estamos a tus órdenes</p>
+  </div>
+  
+  <div class="contact-container">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-location"></i>
+        </div>
+        <div>
+          <h3>Ubicación</h3>
+          <p>Carretera Nacional, Cuernavaca, Morelos</p>
+        </div>
+      </div>
+      
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-phone"></i>
+        </div>
+        <div>
+          <h3>Teléfono</h3>
+          <p>+52 123 456 7890</p>
+        </div>
+      </div>
+      
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-email"></i>
+        </div>
+        <div>
+          <h3>Email</h3>
+          <p>info&#64;jaripeo-campestre.com</p>
+        </div>
+      </div>
+      
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-clock"></i>
+        </div>
+        <div>
+          <h3>Horario</h3>
+          <p>Lunes a Domingo: 8:00 AM - 10:00 PM</p>
+        </div>
+      </div>
+      
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="icon-facebook"></i></a>
+        <a href="#" class="social-link"><i class="icon-instagram"></i></a>
+        <a href="#" class="social-link"><i class="icon-twitter"></i></a>
+      </div>
+    </div>
+    
+    <div class="contact-form">
+      <h3>Envíanos un mensaje</h3>
+      
+      <div *ngIf="submitSuccess" class="form-success">
+        <p><i class="icon-check"></i> ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.</p>
+      </div>
+      
+      <div *ngIf="submitError" class="form-error">
+        <p><i class="icon-error"></i> {{ submitError }}</p>
+      </div>
+      
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Tu nombre"
+            [class.input-error]="nameControl?.invalid && nameControl?.touched">
+          <div *ngIf="nameControl?.invalid && nameControl?.touched" class="error-message">
+            Por favor ingresa tu nombre
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="Tu email"
+            [class.input-error]="emailControl?.invalid && emailControl?.touched">
+          <div *ngIf="emailControl?.invalid && emailControl?.touched" class="error-message">
+            Por favor ingresa un email válido
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone" 
+            placeholder="Tu teléfono"
+            [class.input-error]="phoneControl?.invalid && phoneControl?.touched">
+          <div *ngIf="phoneControl?.invalid && phoneControl?.touched" class="error-message">
+            Por favor ingresa tu número telefónico
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Mensaje</label>
+          <textarea 
+            id="message" 
+            rows="5" 
+            formControlName="message" 
+            placeholder="Tu mensaje"
+            [class.input-error]="messageControl?.invalid && messageControl?.touched"></textarea>
+          <div *ngIf="messageControl?.invalid && messageControl?.touched" class="error-message">
+            Por favor ingresa un mensaje de al menos 10 caracteres
+          </div>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="isSubmitting">
+          <span *ngIf="isSubmitting">Enviando...</span>
+          <span *ngIf="!isSubmitting">Enviar Mensaje</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="map-container">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3775.7344188022195!2d-99.10292387479878!3d18.796768687267705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDQ3JzQ4LjQiTiA5OcKwMDYnMDIuNiJX!5e0!3m2!1ses-419!2smx!4v1633368705286!5m2!1ses-419!2smx" 
+      width="100%" 
+      height="450" 
+      style="border:0;" 
+      allowfullscreen="" 
+      loading="lazy">
+    </iframe>
+  </div>
+</div>

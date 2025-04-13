@@ -1,0 +1,46 @@
+<div class="menu-modal">
+  <div class="menu-modal-header">
+    <h2>Menú Completo - El Jaripeo Campestre</h2>
+    <button class="close-button" (click)="closeDialog()">×</button>
+  </div>
+  
+  <div class="menu-categories-nav">
+    <button 
+      *ngFor="let category of menuCategories" 
+      class="menu-category-btn" 
+      [class.active]="activeCategory === category.name.toLowerCase()"
+      (click)="setActiveCategory(category.name.toLowerCase())">
+      {{ category.name }}
+    </button>
+  </div>
+  
+  <div class="menu-content">
+    <ng-container *ngFor="let category of menuCategories">
+      <div class="menu-category-content" *ngIf="activeCategory === category.name.toLowerCase()">
+        <h3>{{ category.name }}</h3>
+        
+        <div class="menu-grid">
+          <div class="menu-item" *ngFor="let item of category.items">
+            <div class="menu-item-img">
+              <img [src]="item.image" [alt]="item.name">
+            </div>
+            <div class="menu-item-content">
+              <div class="menu-item-header">
+                <h4>{{ item.name }}</h4>
+                <span class="menu-item-price">{{ item.price }}</span>
+              </div>
+              <p class="menu-item-description">{{ item.description }}</p>
+              <div class="menu-item-tags" *ngIf="item.tags && item.tags.length">
+                <span *ngFor="let tag of item.tags" class="tag">{{ tag }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  
+  <div class="menu-footer">
+    <p>Los precios pueden variar. Consulta con nuestro personal para platillos del día y promociones.</p>
+  </div>
+</div>

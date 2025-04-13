@@ -1,1 +1,220 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Global styles for restaurant landing page */
+
+/* Color variables - Earthy, countryside theme */
+:root {
+  --primary-red: #e62e2e;     /* Logo red */
+  --primary-green: #28a745;   /* Logo green */
+  --black: #212121;           /* Logo black */
+  --dark-text: #333333;       /* Dark text color */
+  --medium-text: #555555;     /* Medium text color */
+  --light-text: #ffffff;      /* Light text */
+  --cream: #fffdf6;           /* Near white for backgrounds */
+  --shadow: rgba(0, 0, 0, 0.1);  /* Shadow color */
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 5rem;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  
+  /* Font sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.5rem;
+  --text-xl: 2rem;
+  --text-2xl: 2.5rem;
+  --text-3xl: 3rem;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: var(--text-base);
+  color: var(--dark-text);
+  line-height: 1.6;
+  background-color: var(--light-cream);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--dark-text);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--text-3xl);
+}
+
+h2 {
+  font-size: var(--text-2xl);
+}
+
+h3 {
+  font-size: var(--text-xl);
+}
+
+a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--light-green);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+}
+
+.section {
+  padding: var(--spacing-xl) 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-green);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--light-green);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-green);
+  border: 1px solid var(--primary-green);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-green);
+  color: white;
+}
+
+/* Utilities */
+.text-center {
+  text-align: center;
+}
+
+.mb-1 {
+  margin-bottom: var(--spacing-xs);
+}
+
+.mb-2 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.mb-3 {
+  margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.mt-1 {
+  margin-top: var(--spacing-xs);
+}
+
+.mt-2 {
+  margin-top: var(--spacing-sm);
+}
+
+.mt-3 {
+  margin-top: var(--spacing-md);
+}
+
+.mt-4 {
+  margin-top: var(--spacing-lg);
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* Icon placeholders - Replace with actual icon library like Font Awesome */
+
+.icon-family:before {
+  content: "👪";
+}
+
+.icon-pool:before {
+  content: "🏊";
+}
+
+.icon-garden:before {
+  content: "🌳";
+}
+
+.icon-food:before {
+  content: "🍽️";
+}
+
+.icon-location:before {
+  content: "📍";
+}
+
+.icon-phone:before {
+  content: "📞";
+}
+
+.icon-email:before {
+  content: "✉️";
+}
+
+.icon-clock:before {
+  content: "🕒";
+}
+
+.icon-facebook:before {
+  content: "f";
+}
+
+.icon-instagram:before {
+  content: "📷";
+}
+
+.icon-twitter:before {
+  content: "🐦";
+}
+
