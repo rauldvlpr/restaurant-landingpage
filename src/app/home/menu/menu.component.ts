@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuFullModalComponent } from '../../menu-full-modal/menu-full-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 
 interface MenuItem {
@@ -11,11 +12,10 @@ interface MenuItem {
 }
 
 @Component({
-  selector: 'app-menu',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+    selector: 'app-menu',
+    imports: [CommonModule, MatDialogModule],
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
   activeCategory: string = 'entradas';
@@ -104,13 +104,19 @@ export class MenuComponent {
     ]
   };
   
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
   
   setActiveCategory(category: string): void {
     this.activeCategory = category;
   }
   
   openFullMenu(): void {
-   
+    this.dialog.open(MenuFullModalComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '90vh',
+      width: '90vw',
+      panelClass: 'full-menu-dialog'
+    });
   }
 }

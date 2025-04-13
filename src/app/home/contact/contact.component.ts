@@ -4,11 +4,10 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { Resend } from 'resend';
 
 @Component({
-  selector: 'app-contact',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss'
+    selector: 'app-contact',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './contact.component.html',
+    styleUrl: './contact.component.scss'
 })
 export class ContactComponent {
   contactForm: FormGroup;
@@ -22,7 +21,11 @@ export class ContactComponent {
   
   constructor(private fb: FormBuilder) {
     this.contactForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
+      name: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/)
+      ]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       message: ['', [Validators.required, Validators.minLength(10)]]

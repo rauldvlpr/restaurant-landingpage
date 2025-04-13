@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  overflow-x: hidden;
+}
+
+section {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  transform: translateZ(-1px) scale(2);
+  transform-origin: center top;
+}
+
+// Efecto de transición suave entre secciones
+html {
+  scroll-behavior: smooth;
+}

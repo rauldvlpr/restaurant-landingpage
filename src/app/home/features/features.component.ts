@@ -9,11 +9,10 @@ interface Feature {
 }
 
 @Component({
-  selector: 'app-features',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './features.component.html',
-  styleUrl: './features.component.scss'
+    selector: 'app-features',
+    imports: [CommonModule],
+    templateUrl: './features.component.html',
+    styleUrl: './features.component.scss'
 })
 export class FeaturesComponent {
   activeFeature: string = 'familiar';

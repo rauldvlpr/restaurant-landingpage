@@ -1,20 +1,20 @@
-<header class="header">
+<header class="header" [class.scrolled]="isScrolled">
     <div class="container">
         <div class="header-content">
             <div class="logo">
                 <a href="#">
-                    <img src="https://i.ibb.co/KrjDS1g/jaripeo-logo.png" alt="El Jaripeo Campestre Logo" class="logo-img">
-                    <h1>El Jaripeo Campestre</h1>
+                    <img src="assets/images/logo/eljaripeo-logo.png" alt="El Jaripeo Campestre Logo" class="logo-img">
+                    <h1>El Jaripeo</h1>
                 </a>
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#home">Inicio</a></li>
-                    <li><a href="#about">Nosotros</a></li>
-                    <li><a href="#features">Instalaciones</a></li>
-                    <li><a href="#menu">Menú</a></li>
-                    <li><a href="#gallery">Galería</a></li>
-                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="#hero" [class.active]="activeSection === 'hero'">Inicio</a></li>
+                    <li><a href="#about" [class.active]="activeSection === 'about'">Nosotros</a></li>
+                    <li><a href="#features" [class.active]="activeSection === 'features'">Instalaciones</a></li>
+                    <li><a href="#menu" [class.active]="activeSection === 'menu'">Menú</a></li>
+                    <li><a href="#gallery" [class.active]="activeSection === 'gallery'">Galería</a></li>
+                    <li><a href="#contact" [class.active]="activeSection === 'contact'">Contacto</a></li>
                 </ul>
             </nav>
             <button class="btn btn-primary reservation-btn">Reservar</button>

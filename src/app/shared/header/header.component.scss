@@ -6,23 +6,59 @@
   background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  padding: 1rem 0;
+  padding: 0.8rem 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 10px;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
-.logo a {
-  text-decoration: none;
-}
-
-.logo h1 {
-  font-size: 1.5rem;
-  color: var(--black);
-  margin: 0;
+.logo {
+  display: flex;
+  align-items: center;
+  
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .logo-img {
+    height: 60px;
+    width: auto;
+    margin-right: 12px;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  h1 {
+    font-size: 1.7rem;
+    color: var(--black);
+    margin: 0;
+    font-weight: 700;
+    
+    @media (max-width: 768px) {
+      font-size: 1.4rem;
+    }
+    
+    @media (max-width: 576px) {
+      display: none;
+    }
+  }
 }
 
 .main-nav ul {
@@ -36,10 +72,27 @@
   font-weight: 500;
   color: var(--dark-text);
   transition: color 0.3s ease;
-}
-
-.main-nav a:hover {
-  color: var(--primary-red);
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-red);
+    transition: width 0.3s ease;
+  }
+  
+  &:hover::after, &.active::after {
+    width: 100%;
+  }
+  
+  &.active {
+    color: var(--primary-red);
+    font-weight: 600;
+  }
 }
 
 .reservation-btn {
@@ -76,5 +129,12 @@
 .logo-img {
   height: 50px;
   width: auto;
-  margin-right: 10px;
+  display: block;
+  max-width: 100%;
+}
+
+/* Cuando se hace scroll, reducir ligeramente el tamaño del logo */
+.header.scrolled .logo-img {
+  height: 50px;
+  transition: height 0.3s ease;
 }
