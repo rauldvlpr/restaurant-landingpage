@@ -4,25 +4,49 @@
 </app-side-navigation>
 
 <section id="hero" class="hero-section" [@sectionAnimation]>
+  <div class="rustic-pattern top-right"></div>
   <app-hero></app-hero>
 </section>
 
+<div class="section-connector"></div>
+
 <section id="about" class="section" [@sectionAnimation]>
-  <app-about></app-about>
+  <div class="rustic-pattern bottom-left"></div>
+  <div class="container animate-item">
+    <app-about></app-about>
+  </div>
 </section>
 
-<section id="features" class="section" [@sectionAnimation]>
-  <app-features></app-features>
+<div class="section-connector"></div>
+
+<section id="features" class="section section-features" [@sectionAnimation]>
+  <div class="container animate-item">
+    <app-features></app-features>
+  </div>
 </section>
+
+<div class="section-connector"></div>
 
 <section id="menu" class="section" [@sectionAnimation]>
-  <app-menu></app-menu>
+  <div class="rustic-pattern top-right"></div>
+  <div class="container animate-item">
+    <app-menu></app-menu>
+  </div>
 </section>
+
+<div class="section-connector"></div>
 
 <section id="gallery" class="section" [@sectionAnimation]>
-  <app-gallery></app-gallery>
+  <div class="container animate-item">
+    <app-gallery></app-gallery>
+  </div>
 </section>
 
+<div class="section-connector"></div>
+
 <section id="contact" class="section" [@sectionAnimation]>
-  <app-contact></app-contact>
+  <div class="rustic-pattern bottom-left"></div>
+  <div class="container animate-item">
+    <app-contact></app-contact>
+  </div>
 </section>

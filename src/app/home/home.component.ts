@@ -7,7 +7,7 @@ import { MenuComponent } from './menu/menu.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { ContactComponent } from './contact/contact.component';
 import { SideNavigationComponent } from '../side-navigation/side-navigation.component';
-import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { trigger, transition, style, animate, query, stagger, group } from '@angular/animations';
 
 @Component({
     selector: 'app-home',
@@ -27,10 +27,28 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
     animations: [
         trigger('sectionAnimation', [
             transition(':enter', [
+                style({ opacity: 0 }),
+                animate('0.8s ease-out', style({ opacity: 1 })),
                 query('.animate-item', [
-                    style({ opacity: 0, transform: 'translateY(20px)' }),
+                    style({ opacity: 0, transform: 'translateY(30px)' }),
                     stagger(100, [
                         animate('0.6s ease', style({ opacity: 1, transform: 'translateY(0)' }))
+                    ])
+                ], { optional: true })
+            ])
+        ]),
+        trigger('fadeInUpAnimation', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateY(30px)' }),
+                animate('0.8s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+            ])
+        ]),
+        trigger('staggerAnimation', [
+            transition('* => *', [
+                query(':enter', [
+                    style({ opacity: 0, transform: 'translateY(30px)' }),
+                    stagger(100, [
+                        animate('0.8s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
                     ])
                 ], { optional: true })
             ])
@@ -46,6 +64,9 @@ export class HomeComponent implements OnInit {
         window.addEventListener('scroll', this.checkActiveSection.bind(this));
         // Comprobar la sección activa al inicio
         this.checkActiveSection();
+        
+        // Configurar observador para animaciones al hacer scroll
+        this.setupScrollObserver();
     }
     
     // También podemos usar el decorador @HostListener como alternativa
@@ -82,5 +103,27 @@ export class HomeComponent implements OnInit {
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
+    }
+    
+    setupScrollObserver() {
+        const options = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // elemento es visible cuando el 10% está en viewport
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, options);
+        
+        // Observar elementos con clases de animación
+        const revealElements = document.querySelectorAll('.reveal-on-scroll, .reveal-fade-in, .reveal-scale-in');
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
     }
 }

@@ -18,6 +18,26 @@
                 </ul>
             </nav>
             <button class="btn btn-primary reservation-btn">Reservar</button>
+            
+            <button class="menu-toggle" [class.active]="isMobileMenuOpen" (click)="toggleMobileMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
         </div>
     </div>
+    
+    <div class="mobile-nav" [class.open]="isMobileMenuOpen">
+        <ul>
+            <li><a href="#hero" [class.active]="activeSection === 'hero'" (click)="closeMobileMenu()">Inicio</a></li>
+            <li><a href="#about" [class.active]="activeSection === 'about'" (click)="closeMobileMenu()">Nosotros</a></li>
+            <li><a href="#features" [class.active]="activeSection === 'features'" (click)="closeMobileMenu()">Instalaciones</a></li>
+            <li><a href="#menu" [class.active]="activeSection === 'menu'" (click)="closeMobileMenu()">Menú</a></li>
+            <li><a href="#gallery" [class.active]="activeSection === 'gallery'" (click)="closeMobileMenu()">Galería</a></li>
+            <li><a href="#contact" [class.active]="activeSection === 'contact'" (click)="closeMobileMenu()">Contacto</a></li>
+        </ul>
+        <button class="mobile-btn">Reservar ahora</button>
+    </div>
+    
+    <div class="overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
 </header>

@@ -11,7 +11,8 @@ import { RouterLink } from '@angular/router';
 })
 export class HeaderComponent {
     isScrolled: boolean = false;
-    activeSection: string = 'home';
+    activeSection: string = 'hero';
+    isMobileMenuOpen: boolean = false;
     
     @HostListener('window:scroll', [])
     onWindowScroll() {
@@ -20,7 +21,7 @@ export class HeaderComponent {
     }
     
     updateActiveSection() {
-        const sections = ['home', 'about', 'features', 'menu', 'gallery', 'contact'];
+        const sections = ['hero', 'about', 'features', 'menu', 'gallery', 'contact'];
         
         for (const section of sections) {
             const element = document.getElementById(section);
@@ -33,5 +34,15 @@ export class HeaderComponent {
                 }
             }
         }
+    }
+    
+    toggleMobileMenu() {
+        this.isMobileMenuOpen = !this.isMobileMenuOpen;
+        document.body.style.overflow = this.isMobileMenuOpen ? 'hidden' : '';
+    }
+    
+    closeMobileMenu() {
+        this.isMobileMenuOpen = false;
+        document.body.style.overflow = '';
     }
 }

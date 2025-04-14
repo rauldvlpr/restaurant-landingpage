@@ -1,11 +1,11 @@
 <div class="container">
-  <div class="section-header text-center">
+  <div class="section-header text-center animate-item">
     <h2>Contáctanos</h2>
     <p class="subtitle">Estamos a tus órdenes</p>
   </div>
   
   <div class="contact-container">
-    <div class="contact-info">
+    <div class="contact-info animate-item">
       <div class="contact-item">
         <div class="contact-icon">
           <i class="icon-location"></i>
@@ -53,15 +53,17 @@
       </div>
     </div>
     
-    <div class="contact-form">
+    <div class="contact-form animate-item">
       <h3>Envíanos un mensaje</h3>
       
-      <div *ngIf="submitSuccess" class="form-success">
-        <p><i class="icon-check"></i> ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.</p>
+      <!-- Mensaje de éxito -->
+      <div class="alert alert-success" *ngIf="formSuccess">
+        <p><i class="icon-check"></i> ¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.</p>
       </div>
       
-      <div *ngIf="submitError" class="form-error">
-        <p><i class="icon-error"></i> {{ submitError }}</p>
+      <!-- Mensaje de error -->
+      <div class="alert alert-error" *ngIf="formError">
+        <p><i class="icon-error"></i> Hubo un error al enviar el mensaje. Por favor intenta nuevamente.</p>
       </div>
       
       <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
@@ -71,10 +73,12 @@
             type="text" 
             id="name" 
             formControlName="name" 
-            placeholder="Tu nombre"
-            [class.input-error]="nameControl?.invalid && nameControl?.touched">
-          <div *ngIf="nameControl?.invalid && nameControl?.touched" class="error-message">
-            Por favor ingresa tu nombre
+            class="form-control" 
+            [class.is-invalid]="f['name'].invalid && (f['name'].touched || submitted)" 
+            placeholder="Tu nombre">
+          <div class="feedback invalid-feedback" *ngIf="f['name'].invalid && (f['name'].touched || submitted)">
+            <span *ngIf="f['name'].errors?.['required']">El nombre es obligatorio</span>
+            <span *ngIf="f['name'].errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
           </div>
         </div>
         
@@ -84,10 +88,12 @@
             type="email" 
             id="email" 
             formControlName="email" 
-            placeholder="Tu email"
-            [class.input-error]="emailControl?.invalid && emailControl?.touched">
-          <div *ngIf="emailControl?.invalid && emailControl?.touched" class="error-message">
-            Por favor ingresa un email válido
+            class="form-control" 
+            [class.is-invalid]="f['email'].invalid && (f['email'].touched || submitted)" 
+            placeholder="Tu email">
+          <div class="feedback invalid-feedback" *ngIf="f['email'].invalid && (f['email'].touched || submitted)">
+            <span *ngIf="f['email'].errors?.['required']">El email es obligatorio</span>
+            <span *ngIf="f['email'].errors?.['email']">Por favor ingresa un email válido</span>
           </div>
         </div>
         
@@ -97,10 +103,11 @@
             type="tel" 
             id="phone" 
             formControlName="phone" 
-            placeholder="Tu teléfono"
-            [class.input-error]="phoneControl?.invalid && phoneControl?.touched">
-          <div *ngIf="phoneControl?.invalid && phoneControl?.touched" class="error-message">
-            Por favor ingresa tu número telefónico
+            class="form-control" 
+            [class.is-invalid]="f['phone'].invalid && (f['phone'].touched || submitted)" 
+            placeholder="Tu teléfono">
+          <div class="feedback invalid-feedback" *ngIf="f['phone'].invalid && (f['phone'].touched || submitted)">
+            <span *ngIf="f['phone'].errors?.['required']">El teléfono es obligatorio</span>
           </div>
         </div>
         
@@ -110,32 +117,112 @@
             id="message" 
             rows="5" 
             formControlName="message" 
-            placeholder="Tu mensaje"
-            [class.input-error]="messageControl?.invalid && messageControl?.touched"></textarea>
-          <div *ngIf="messageControl?.invalid && messageControl?.touched" class="error-message">
-            Por favor ingresa un mensaje de al menos 10 caracteres
+            class="form-control" 
+            [class.is-invalid]="f['message'].invalid && (f['message'].touched || submitted)" 
+            placeholder="Tu mensaje"></textarea>
+          <div class="feedback invalid-feedback" *ngIf="f['message'].invalid && (f['message'].touched || submitted)">
+            <span *ngIf="f['message'].errors?.['required']">El mensaje es obligatorio</span>
+            <span *ngIf="f['message'].errors?.['minlength']">El mensaje debe tener al menos 10 caracteres</span>
           </div>
         </div>
         
-        <button 
-          type="submit" 
-          class="btn btn-primary"
-          [disabled]="isSubmitting">
-          <span *ngIf="isSubmitting">Enviando...</span>
-          <span *ngIf="!isSubmitting">Enviar Mensaje</span>
-        </button>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-with-icon" [disabled]="submitted">
+            <span *ngIf="!submitted">Enviar Mensaje</span>
+            <span *ngIf="submitted">Enviando...</span>
+            <i class="icon icon-send" *ngIf="!submitted"></i>
+            <i class="icon icon-loading" *ngIf="submitted"></i>
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">Limpiar</button>
+        </div>
       </form>
     </div>
   </div>
   
-  <div class="map-container">
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3775.7344188022195!2d-99.10292387479878!3d18.796768687267705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDQ3JzQ4LjQiTiA5OcKwMDYnMDIuNiJX!5e0!3m2!1ses-419!2smx!4v1633368705286!5m2!1ses-419!2smx" 
-      width="100%" 
-      height="450" 
-      style="border:0;" 
-      allowfullscreen="" 
-      loading="lazy">
-    </iframe>
+  <div class="section-header text-center animate-item directions-section">
+    <h2>Cómo Llegar</h2>
+    <p class="subtitle">Encuentra la mejor ruta hacia El Jaripeo Campestre</p>
+  </div>
+
+  <div class="directions-container">
+    <div class="directions-panel animate-item">
+      <div class="directions-form">
+        <h3>Calcular Ruta</h3>
+        <div class="form-group">
+          <label for="origin">Tu ubicación:</label>
+          <div class="location-input-container">
+            <input 
+              type="text" 
+              id="origin" 
+              class="form-control" 
+              placeholder="Ingresa tu dirección" 
+              [(ngModel)]="originAddress">
+            <button class="location-btn" (click)="detectUserLocation()" title="Usar mi ubicación actual">
+              <i class="icon-location"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="destination">Destino:</label>
+          <input 
+            type="text" 
+            id="destination" 
+            class="form-control" 
+            [(ngModel)]="restaurantAddress" 
+            readonly>
+        </div>
+        <div class="form-group">
+          <label>Modo de transporte:</label>
+          <div class="transport-options">
+            <button 
+              *ngFor="let mode of transportModes" 
+              class="transport-btn" 
+              [class.active]="selectedMode === mode.value"
+              (click)="setTransportMode(mode.value)">
+              <i [class]="mode.icon"></i>
+              <span>{{mode.label}}</span>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-with-icon" (click)="calculateRoute()">
+          <span>Calcular Ruta</span>
+          <i class="icon-arrow-right"></i>
+        </button>
+      </div>
+      
+      <div class="route-info" *ngIf="routeInfo">
+        <h3>Información de la ruta</h3>
+        <div class="route-summary">
+          <div class="route-summary-item">
+            <i class="icon-distance"></i>
+            <div>
+              <span class="label">Distancia</span>
+              <span class="value">{{routeInfo.distance}}</span>
+            </div>
+          </div>
+          <div class="route-summary-item">
+            <i class="icon-time"></i>
+            <div>
+              <span class="label">Tiempo estimado</span>
+              <span class="value">{{routeInfo.duration}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="route-instructions" *ngIf="routeInfo.steps.length > 0">
+          <h4>Indicaciones:</h4>
+          <ol class="steps-list">
+            <li *ngFor="let step of routeInfo.steps" [innerHTML]="step"></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    
+    <div class="map-container animate-item">
+      <div id="mapDirections" class="map"></div>
+      <div class="map-overlay" *ngIf="isLoadingMap">
+        <div class="loading-spinner"></div>
+        <p>Cargando mapa...</p>
+      </div>
+    </div>
   </div>
 </div>
