@@ -1,0 +1,277 @@
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.feature-card {
+  background-color: white;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  
+  /* Decoración campestre */
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: var(--primary-red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-base);
+  }
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    
+    &:before {
+      transform: scaleX(1);
+    }
+    
+    .feature-icon {
+      background-color: var(--primary-red);
+      color: white;
+      transform: rotateY(180deg);
+    }
+  }
+  
+  h3 {
+    margin-bottom: var(--space-sm);
+    color: var(--primary-black);
+    position: relative;
+    display: inline-block;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background-color: var(--primary-red);
+      transition: width var(--transition-base);
+    }
+  }
+  
+  &:hover h3:after {
+    width: 100%;
+  }
+  
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+.feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--gray-100);
+  border-radius: var(--radius-round);
+  color: var(--primary-red);
+  font-size: 32px;
+  transition: all var(--transition-base);
+}
+
+.features-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.feature-image {
+  height: 250px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.feature-image:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.feature-image:hover img {
+  transform: scale(1.05);
+}
+
+@media (max-width: 992px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .features-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+  
+  .features-tabs {
+    gap: var(--space-sm);
+  }
+  
+  .feature-tab {
+    flex: 0 1 auto;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .features-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+  
+  .feature-description {
+    margin-bottom: var(--space-lg);
+  }
+  
+  .feature-description h3 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: 576px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .features-gallery {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .feature-image {
+    height: 220px;
+    margin-bottom: var(--space-md);
+  }
+  
+  .feature-tab {
+    flex: 1 1 calc(50% - 0.5rem);
+    padding: 0.6rem 1rem;
+    font-size: var(--font-size-sm);
+  }
+}
+
+.section-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.features-tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.feature-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  background-color: var(--cream);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-base);
+  margin: 0 var(--space-xs);
+}
+
+.feature-tab i {
+  font-size: var(--font-size-md);
+}
+
+.feature-tab:hover, .feature-tab.active {
+  background-color: var(--primary-red);
+  color: var(--text-light);
+}
+
+.feature-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.feature-description {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--space-xl);
+}
+
+.feature-description h3 {
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-xl);
+  position: relative;
+  display: inline-block;
+}
+
+.feature-description h3::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary-red);
+}
+
+.feature-description p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Elementos decorativos campestres */
+.section-features {
+  position: relative;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/patterns/rustic-pattern.svg');
+    background-repeat: repeat;
+    opacity: 0.03;
+    z-index: -1;
+  }
+}

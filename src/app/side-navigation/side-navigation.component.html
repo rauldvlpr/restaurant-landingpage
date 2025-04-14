@@ -1,0 +1,15 @@
+<div class="side-nav">
+  <div class="nav-dots">
+    <a 
+      *ngFor="let section of sections" 
+      (click)="navigateToSection(section.id); $event.preventDefault()"
+      [href]="'#' + section.id" 
+      class="nav-dot" 
+      [class.active]="activeSection === section.id"
+      [attr.data-tooltip]="section.label">
+      <div class="dot-content">
+        <span class="dot-icon">{{ section.icon }}</span>
+      </div>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="menu-modal">
+  <div class="menu-modal-header">
+    <h2>El Jaripeo Campestre - Menú Completo</h2>
+    <button class="close-button" (click)="closeDialog()" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <div class="menu-categories-nav">
+    <button 
+      *ngFor="let category of menuCategories" 
+      class="menu-category-btn" 
+      [class.active]="activeCategory === category.id"
+      (click)="setActiveCategory(category.id)">
+      {{ category.name }}
+    </button>
+  </div>
+  
+  <div class="menu-content">
+    <div class="category-header">
+      <h3>{{ getActiveCategoryName() }}</h3>
+      <span class="item-count">{{ menuItems[activeCategory]?.length || 0 }} platillos</span>
+    </div>
+    
+    <div class="menu-grid">
+      <div class="menu-item" *ngFor="let item of menuItems[activeCategory]">
+        <div class="menu-item-img">
+          <img [src]="item.image" [alt]="item.name" (click)="openImageZoom(item.image)">
+          <div class="image-zoom-hint">
+            <mat-icon>zoom_in</mat-icon>
+          </div>
+        </div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>{{ item.name }}</h4>
+            <span class="menu-item-price">{{ item.price }}</span>
+          </div>
+          <p class="menu-item-description">{{ item.description }}</p>
+          <div class="menu-item-tags" *ngIf="item.tags && item.tags.length">
+            <span *ngFor="let tag of item.tags" class="tag">{{ tag }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="empty-category" *ngIf="!menuItems[activeCategory] || menuItems[activeCategory].length === 0">
+      <p>No hay platillos disponibles en esta categoría actualmente.</p>
+    </div>
+  </div>
+  
+  <div class="image-zoom-modal" *ngIf="zoomImageUrl" (click)="closeImageZoom()">
+    <div class="zoom-image-container">
+      <img [src]="zoomImageUrl" alt="Imagen ampliada">
+      <button class="close-zoom-btn" (click)="closeImageZoom($event)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div class="menu-footer">
+    <p>Los precios están sujetos a cambios. Consulta con nuestro personal para conocer los platillos del día y promociones especiales.</p>
+  </div>
+</div>

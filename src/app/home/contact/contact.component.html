@@ -1,0 +1,228 @@
+<div class="container">
+  <div class="section-header text-center animate-item">
+    <h2>Contáctanos</h2>
+    <p class="subtitle">Estamos a tus órdenes</p>
+  </div>
+  
+  <div class="contact-container">
+    <div class="contact-info animate-item">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-location"></i>
+        </div>
+        <div>
+          <h3>Ubicación</h3>
+          <p>Carretera Nacional, Cuernavaca, Morelos</p>
+        </div>
+      </div>
+      
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-phone"></i>
+        </div>
+        <div>
+          <h3>Teléfono</h3>
+          <p>+52 123 456 7890</p>
+        </div>
+      </div>
+      
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-email"></i>
+        </div>
+        <div>
+          <h3>Email</h3>
+          <p>info&#64;jaripeo-campestre.com</p>
+        </div>
+      </div>
+      
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="icon-clock"></i>
+        </div>
+        <div>
+          <h3>Horario</h3>
+          <p>Lunes a Domingo: 8:00 AM - 10:00 PM</p>
+        </div>
+      </div>
+      
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="icon-facebook"></i></a>
+        <a href="#" class="social-link"><i class="icon-instagram"></i></a>
+        <a href="#" class="social-link"><i class="icon-twitter"></i></a>
+      </div>
+    </div>
+    
+    <div class="contact-form animate-item">
+      <h3>Envíanos un mensaje</h3>
+      
+      <!-- Mensaje de éxito -->
+      <div class="alert alert-success" *ngIf="formSuccess">
+        <p><i class="icon-check"></i> ¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.</p>
+      </div>
+      
+      <!-- Mensaje de error -->
+      <div class="alert alert-error" *ngIf="formError">
+        <p><i class="icon-error"></i> Hubo un error al enviar el mensaje. Por favor intenta nuevamente.</p>
+      </div>
+      
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            class="form-control" 
+            [class.is-invalid]="f['name'].invalid && (f['name'].touched || submitted)" 
+            placeholder="Tu nombre">
+          <div class="feedback invalid-feedback" *ngIf="f['name'].invalid && (f['name'].touched || submitted)">
+            <span *ngIf="f['name'].errors?.['required']">El nombre es obligatorio</span>
+            <span *ngIf="f['name'].errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            class="form-control" 
+            [class.is-invalid]="f['email'].invalid && (f['email'].touched || submitted)" 
+            placeholder="Tu email">
+          <div class="feedback invalid-feedback" *ngIf="f['email'].invalid && (f['email'].touched || submitted)">
+            <span *ngIf="f['email'].errors?.['required']">El email es obligatorio</span>
+            <span *ngIf="f['email'].errors?.['email']">Por favor ingresa un email válido</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone" 
+            class="form-control" 
+            [class.is-invalid]="f['phone'].invalid && (f['phone'].touched || submitted)" 
+            placeholder="Tu teléfono">
+          <div class="feedback invalid-feedback" *ngIf="f['phone'].invalid && (f['phone'].touched || submitted)">
+            <span *ngIf="f['phone'].errors?.['required']">El teléfono es obligatorio</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Mensaje</label>
+          <textarea 
+            id="message" 
+            rows="5" 
+            formControlName="message" 
+            class="form-control" 
+            [class.is-invalid]="f['message'].invalid && (f['message'].touched || submitted)" 
+            placeholder="Tu mensaje"></textarea>
+          <div class="feedback invalid-feedback" *ngIf="f['message'].invalid && (f['message'].touched || submitted)">
+            <span *ngIf="f['message'].errors?.['required']">El mensaje es obligatorio</span>
+            <span *ngIf="f['message'].errors?.['minlength']">El mensaje debe tener al menos 10 caracteres</span>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-with-icon" [disabled]="submitted">
+            <span *ngIf="!submitted">Enviar Mensaje</span>
+            <span *ngIf="submitted">Enviando...</span>
+            <i class="icon icon-send" *ngIf="!submitted"></i>
+            <i class="icon icon-loading" *ngIf="submitted"></i>
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">Limpiar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="section-header text-center animate-item directions-section">
+    <h2>Cómo Llegar</h2>
+    <p class="subtitle">Encuentra la mejor ruta hacia El Jaripeo Campestre</p>
+  </div>
+
+  <div class="directions-container">
+    <div class="directions-panel animate-item">
+      <div class="directions-form">
+        <h3>Calcular Ruta</h3>
+        <div class="form-group">
+          <label for="origin">Tu ubicación:</label>
+          <div class="location-input-container">
+            <input 
+              type="text" 
+              id="origin" 
+              class="form-control" 
+              placeholder="Ingresa tu dirección" 
+              [(ngModel)]="originAddress">
+            <button class="location-btn" (click)="detectUserLocation()" title="Usar mi ubicación actual">
+              <i class="icon-location"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="destination">Destino:</label>
+          <input 
+            type="text" 
+            id="destination" 
+            class="form-control" 
+            [(ngModel)]="restaurantAddress" 
+            readonly>
+        </div>
+        <div class="form-group">
+          <label>Modo de transporte:</label>
+          <div class="transport-options">
+            <button 
+              *ngFor="let mode of transportModes" 
+              class="transport-btn" 
+              [class.active]="selectedMode === mode.value"
+              (click)="setTransportMode(mode.value)">
+              <i [class]="mode.icon"></i>
+              <span>{{mode.label}}</span>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-with-icon" (click)="calculateRoute()">
+          <span>Calcular Ruta</span>
+          <i class="icon-arrow-right"></i>
+        </button>
+      </div>
+      
+      <div class="route-info" *ngIf="routeInfo">
+        <h3>Información de la ruta</h3>
+        <div class="route-summary">
+          <div class="route-summary-item">
+            <i class="icon-distance"></i>
+            <div>
+              <span class="label">Distancia</span>
+              <span class="value">{{routeInfo.distance}}</span>
+            </div>
+          </div>
+          <div class="route-summary-item">
+            <i class="icon-time"></i>
+            <div>
+              <span class="label">Tiempo estimado</span>
+              <span class="value">{{routeInfo.duration}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="route-instructions" *ngIf="routeInfo.steps.length > 0">
+          <h4>Indicaciones:</h4>
+          <ol class="steps-list">
+            <li *ngFor="let step of routeInfo.steps" [innerHTML]="step"></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    
+    <div class="map-container animate-item">
+      <div id="mapDirections" class="map"></div>
+      <div class="map-overlay" *ngIf="isLoadingMap">
+        <div class="loading-spinner"></div>
+        <p>Cargando mapa...</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="section-header text-center">
+    <h2>Nuestras Instalaciones</h2>
+    <p class="subtitle">Un lugar pensado para tu comodidad</p>
+  </div>
+  
+  <div class="features-tabs">
+    <button 
+      *ngFor="let category of featureCategories" 
+      class="feature-tab" 
+      [class.active]="activeFeature === category.id"
+      (click)="setActiveFeature(category.id)">
+      <i class="{{ features[category.id].icon }}"></i>
+      {{ category.name }}
+    </button>
+  </div>
+  
+  <div class="feature-content">
+    <div class="feature-description">
+      <h3>{{ features[activeFeature].title }}</h3>
+      <p>{{ features[activeFeature].description }}</p>
+    </div>
+    
+    <div class="features-gallery">
+      <div class="feature-image" *ngFor="let image of features[activeFeature].images">
+        <img [src]="image" [alt]="features[activeFeature].title">
+      </div>
+    </div>
+  </div>
+</div>

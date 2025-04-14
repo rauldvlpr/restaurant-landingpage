@@ -1,0 +1,52 @@
+<app-side-navigation 
+  [activeSection]="activeSection"
+  (sectionChange)="scrollToSection($event)">
+</app-side-navigation>
+
+<section id="hero" class="hero-section" [@sectionAnimation]>
+  <div class="rustic-pattern top-right"></div>
+  <app-hero></app-hero>
+</section>
+
+<div class="section-connector"></div>
+
+<section id="about" class="section" [@sectionAnimation]>
+  <div class="rustic-pattern bottom-left"></div>
+  <div class="container animate-item">
+    <app-about></app-about>
+  </div>
+</section>
+
+<div class="section-connector"></div>
+
+<section id="features" class="section section-features" [@sectionAnimation]>
+  <div class="container animate-item">
+    <app-features></app-features>
+  </div>
+</section>
+
+<div class="section-connector"></div>
+
+<section id="menu" class="section" [@sectionAnimation]>
+  <div class="rustic-pattern top-right"></div>
+  <div class="container animate-item">
+    <app-menu></app-menu>
+  </div>
+</section>
+
+<div class="section-connector"></div>
+
+<section id="gallery" class="section" [@sectionAnimation]>
+  <div class="container animate-item">
+    <app-gallery></app-gallery>
+  </div>
+</section>
+
+<div class="section-connector"></div>
+
+<section id="contact" class="section" [@sectionAnimation]>
+  <div class="rustic-pattern bottom-left"></div>
+  <div class="container animate-item">
+    <app-contact></app-contact>
+  </div>
+</section>

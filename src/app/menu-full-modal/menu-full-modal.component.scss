@@ -1,0 +1,356 @@
+.menu-modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.menu-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  
+  h2 {
+    margin: 0;
+    color: var(--primary-red);
+    font-size: 1.5rem;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--medium-text);
+    transition: background-color 0.3s, color 0.3s;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--primary-red);
+    }
+    
+    mat-icon {
+      font-size: 1.5rem;
+      height: 1.5rem;
+      width: 1.5rem;
+      line-height: 1.5rem;
+    }
+  }
+}
+
+.menu-categories-nav {
+  display: flex;
+  overflow-x: auto;
+  padding: 1rem 1.5rem;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+  position: sticky;
+  top: 70px;
+  z-index: 9;
+  
+  /* Para ocultar la barra de desplazamiento pero mantener la funcionalidad */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .menu-category-btn {
+    padding: 0.5rem 1.25rem;
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    
+    &:hover {
+      background-color: rgba(230, 46, 46, 0.05);
+      border-color: var(--primary-red);
+      color: var(--primary-red);
+    }
+    
+    &.active {
+      background-color: var(--primary-red);
+      color: white;
+      border-color: var(--primary-red);
+    }
+  }
+}
+
+.menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    
+    h3 {
+      margin: 0;
+      color: var(--black);
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    
+    .item-count {
+      color: var(--medium-text);
+      font-size: 0.9rem;
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+    }
+  }
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.menu-item {
+  background-color: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  }
+  
+  .menu-item-img {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,0.3) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+      cursor: pointer;
+    }
+  }
+  
+  &:hover .menu-item-img::after {
+    opacity: 1;
+  }
+  
+  &:hover .menu-item-img img {
+    transform: scale(1.05);
+  }
+  
+  .menu-item-content {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+    
+    h4 {
+      margin: 0;
+      color: var(--black);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .menu-item-price {
+      font-weight: 700;
+      color: var(--primary-red);
+      font-size: 1.1rem;
+    }
+  }
+  
+  .menu-item-description {
+    color: var(--medium-text);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+  
+  .menu-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      background-color: #f0f0f0;
+      border-radius: 50px;
+      color: var(--medium-text);
+      
+      &:hover {
+        background-color: #e5e5e5;
+      }
+    }
+  }
+}
+
+.empty-category {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+  color: var(--medium-text);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+.menu-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.85rem;
+  color: var(--medium-text);
+  text-align: center;
+  background-color: white;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .menu-categories-nav {
+    padding: 0.75rem;
+    
+    .menu-category-btn {
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .menu-modal-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .category-header h3 {
+    font-size: 1.5rem;
+  }
+}
+
+// Estilos para el indicador de zoom
+.image-zoom-hint {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  
+  mat-icon {
+    font-size: 20px;
+    line-height: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.menu-item-img:hover .image-zoom-hint {
+  opacity: 1;
+}
+
+// Estilos para el modal de zoom
+.image-zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.zoom-image-container {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  
+  img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  .close-zoom-btn {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+    &:hover {
+      background-color: var(--primary-red);
+    }
+    
+    mat-icon {
+      font-size: 24px;
+    }
+  }
+}
