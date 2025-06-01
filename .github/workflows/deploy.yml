@@ -34,6 +34,7 @@ jobs:
           npm run build -- --configuration production
           touch docs/.nojekyll
           cp README.md docs/
+          cp src/404.html docs/
 
       - name: Deploy
         id: deployment
