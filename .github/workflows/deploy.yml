@@ -31,7 +31,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run build --configuration production
+          npm run build -- --configuration production
           touch docs/.nojekyll
           cp README.md docs/
           cp src/404.html docs/
