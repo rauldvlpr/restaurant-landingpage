@@ -39,12 +39,7 @@
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -61,7 +56,8 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/restaurant-landingpage/"
+              "baseHref": "/restaurant-landingpage/",
+              "deployUrl": "/restaurant-landingpage/"
             },
             "development": {
               "optimization": false,
