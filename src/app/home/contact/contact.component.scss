@@ -147,30 +147,52 @@
 }
 
 .map-container {
-  height: 450px;
+  height: 500px;
+  width: 100%;
+  position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  position: relative;
+  margin-bottom: var(--space-lg);
+  background-color: var(--gray-100);
   
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 5px solid var(--white);
-    border-radius: var(--radius-md);
-    z-index: 1;
-    pointer-events: none;
+  @media (max-width: 992px) {
+    height: 400px;
   }
-  
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--gray-300);
+  border-radius: 50%;
+  border-top-color: var(--primary-red);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: var(--space-sm);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Mejora del efecto de confirmación */
@@ -236,6 +258,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 500px;
+  
+  @media (max-width: 992px) {
+    height: auto;
+    min-height: 400px;
+  }
 }
 
 .directions-form {
@@ -365,7 +393,7 @@
   padding: var(--space-lg);
   flex: 1;
   overflow-y: auto;
-  max-height: 300px;
+  background-color: var(--white);
   
   h3 {
     color: var(--text-primary);
@@ -431,53 +459,6 @@
   }
 }
 
-.map-container {
-  height: 100%;
-  min-height: 500px;
-  position: relative;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  
-  @media (max-width: 992px) {
-    height: 450px;
-  }
-}
-
-.map {
-  width: 100%;
-  height: 100%;
-  border-radius: var(--radius-md);
-}
-
-.map-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--gray-300);
-  border-radius: 50%;
-  border-top-color: var(--primary-red);
-  animation: spin 1s ease-in-out infinite;
-  margin-bottom: var(--space-sm);
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 /* Iconos para direcciones */
 .icon-location::before {
   content: '📍';
@@ -490,4 +471,53 @@
 }
 .icon-time::before {
   content: '⏱️';
+}
+
+/* Estilos para los controles del mapa */
+:host ::ng-deep {
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .leaflet-control-container {
+    .leaflet-routing-container {
+      background-color: var(--white);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-sm);
+      margin: var(--space-sm);
+      max-height: 300px;
+      overflow-y: auto;
+      
+      .leaflet-routing-alternatives-container {
+        display: none;
+      }
+    }
+  }
+  
+  .leaflet-control-zoom {
+    border: none !important;
+    box-shadow: var(--shadow-sm) !important;
+    margin: 10px !important;
+    
+    a {
+      background-color: var(--white) !important;
+      color: var(--text-primary) !important;
+      border: none !important;
+      width: 30px !important;
+      height: 30px !important;
+      line-height: 30px !important;
+      
+      &:hover {
+        background-color: var(--gray-100) !important;
+      }
+    }
+  }
+
+  .leaflet-routing-alt {
+    max-height: 200px;
+    overflow-y: auto;
+  }
 }

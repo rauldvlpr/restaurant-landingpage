@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild, ElementRef, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Resend } from 'resend';
-
-declare var google: any;
 
 @Component({
     selector: 'app-contact',
@@ -21,28 +18,29 @@ export class ContactComponent implements OnInit {
   // Variables para la sección "Cómo Llegar"
   originAddress: string = '';
   restaurantAddress: string = 'El Jaripeo Campestre, Carretera Nacional, Cuernavaca, Morelos';
-  selectedMode: string = 'DRIVING';
+  selectedMode: string = 'car';
   isLoadingMap: boolean = true;
   routeInfo: any = null;
   
   transportModes = [
-    { label: 'Auto', value: 'DRIVING', icon: 'icon-car' },
-    { label: 'Caminando', value: 'WALKING', icon: 'icon-walk' },
-    { label: 'Bicicleta', value: 'BICYCLING', icon: 'icon-bike' },
-    { label: 'Transporte', value: 'TRANSIT', icon: 'icon-bus' }
+    { label: 'Auto', value: 'car', icon: 'icon-car' },
+    { label: 'Caminando', value: 'foot', icon: 'icon-walk' },
+    { label: 'Bicicleta', value: 'bike', icon: 'icon-bike' },
+    { label: 'Transporte', value: 'bus', icon: 'icon-bus' }
   ];
   
-  private map: any;
-  private directionsService: any;
-  private directionsRenderer: any;
-  private geocoder: any;
+  private map: any = null;
+  private routingControl: any = null;
+  private restaurantMarker: any = null;
   private restaurantLocation = { lat: 18.796768687267705, lng: -99.10292387479878 };
+  private isBrowser: boolean;
+  private L: any;
   
-  // Esta API key debería estar en un environment file y nunca directamente en el código
-  // Para producción, deberías implementar un backend para manejar esto de forma segura
-  private resend = new Resend('re_123');
-  
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
     this.contactForm = this.fb.group({
       name: ['', [
         Validators.required,
@@ -55,62 +53,138 @@ export class ContactComponent implements OnInit {
     });
   }
   
-  ngOnInit() {
-    // Cargar la API de Google Maps después de que el componente se inicialice
-    this.loadGoogleMapsScript();
+  async ngOnInit() {
+    if (this.isBrowser) {
+      await this.loadLeaflet();
+    }
   }
-  
-  private loadGoogleMapsScript() {
-    // Solo cargar si no está ya cargado
-    if (!window.document.getElementById('google-maps-script')) {
-      const script = document.createElement('script');
-      script.id = 'google-maps-script';
-      script.src = `https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => this.initMap();
-      document.head.appendChild(script);
-    } else {
-      this.initMap();
+
+  private async loadLeaflet() {
+    if (!this.isBrowser) return;
+
+    try {
+      // Cargar los estilos de Leaflet
+      const leafletStyles = document.createElement('link');
+      leafletStyles.rel = 'stylesheet';
+      leafletStyles.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(leafletStyles);
+
+      // Cargar los estilos de Leaflet Routing Machine
+      const routingStyles = document.createElement('link');
+      routingStyles.rel = 'stylesheet';
+      routingStyles.href = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css';
+      document.head.appendChild(routingStyles);
+
+      // Cargar los módulos
+      const leafletModule = await import('leaflet');
+      const leafletRoutingModule = await import('leaflet-routing-machine');
+      
+      this.L = leafletModule.default;
+      
+      // Configurar el ícono por defecto
+      const DefaultIcon = this.L.icon({
+        iconUrl: 'assets/images/marker-icon.png',
+        shadowUrl: 'assets/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      });
+      
+      this.L.Marker.prototype.options.icon = DefaultIcon;
+
+      // Inicializar el mapa después de cargar los estilos
+      setTimeout(() => {
+        this.initMap();
+      }, 100);
+    } catch (error) {
+      console.error('Error loading Leaflet:', error);
     }
   }
   
   private initMap() {
-    // Inicializa el mapa, los servicios de direcciones y el geocodificador
-    this.map = new google.maps.Map(document.getElementById('mapDirections'), {
-      center: this.restaurantLocation,
-      zoom: 15,
-      mapTypeControl: false,
-      fullscreenControl: false,
-      streetViewControl: false
-    });
-    
-    // Añade un marcador para el restaurante
-    new google.maps.Marker({
-      position: this.restaurantLocation,
-      map: this.map,
-      title: 'El Jaripeo Campestre',
-      icon: {
-        url: 'assets/images/marker-restaurant.png',
-        scaledSize: new google.maps.Size(40, 40)
-      }
-    });
-    
-    this.directionsService = new google.maps.DirectionsService();
-    this.directionsRenderer = new google.maps.DirectionsRenderer({
-      map: this.map,
-      suppressMarkers: false,
-      polylineOptions: {
-        strokeColor: '#e62e2e',
-        strokeWeight: 5
-      }
-    });
-    
-    this.geocoder = new google.maps.Geocoder();
-    this.isLoadingMap = false;
+    if (!this.isBrowser || !this.L) return;
+
+    try {
+      // Inicializa el mapa
+      this.map = this.L.map('mapDirections', {
+        center: [this.restaurantLocation.lat, this.restaurantLocation.lng],
+        zoom: 15,
+        zoomControl: true,
+        attributionControl: true,
+        scrollWheelZoom: true
+      });
+      
+      // Añade el tile layer de OpenStreetMap
+      this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(this.map);
+      
+      // Añade el marcador del restaurante
+      const restaurantIcon = this.L.icon({
+        iconUrl: 'assets/images/marker-restaurant.png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+      });
+      
+      this.restaurantMarker = this.L.marker([this.restaurantLocation.lat, this.restaurantLocation.lng], {
+        icon: restaurantIcon
+      }).addTo(this.map);
+      
+      this.restaurantMarker.bindPopup('El Jaripeo Campestre').openPopup();
+      
+      // Inicializa el control de rutas
+      this.routingControl = this.L.Routing.control({
+        waypoints: [],
+        routeWhileDragging: true,
+        show: false,
+        addWaypoints: false,
+        draggableWaypoints: false,
+        fitSelectedRoutes: true,
+        lineOptions: {
+          styles: [{ color: '#e62e2e', weight: 5 }]
+        },
+        createMarker: () => null,
+        router: this.L.Routing.osrmv1({
+          serviceUrl: 'https://router.project-osrm.org/route/v1'
+        })
+      }).addTo(this.map);
+
+      // Escuchar eventos de la ruta
+      this.routingControl.on('routesfound', (e: any) => {
+        const routes = e.routes;
+        if (routes && routes.length > 0) {
+          const route = routes[0];
+          this.routeInfo = {
+            distance: this.formatDistance(route.summary.totalDistance),
+            duration: this.formatDuration(route.summary.totalTime),
+            steps: this.formatRouteSteps(route.instructions)
+          };
+        }
+        this.isLoadingMap = false;
+      });
+
+      this.routingControl.on('routingerror', (e: any) => {
+        console.error('Error en el cálculo de la ruta:', e);
+        this.isLoadingMap = false;
+        alert('No se pudo calcular la ruta. Por favor intenta nuevamente.');
+      });
+
+      // Forzar un resize del mapa
+      setTimeout(() => {
+        this.map.invalidateSize();
+      }, 200);
+      
+      this.isLoadingMap = false;
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      this.isLoadingMap = false;
+    }
   }
   
   detectUserLocation() {
+    if (!this.isBrowser) return;
+    
     if (navigator.geolocation) {
       this.isLoadingMap = true;
       
@@ -121,8 +195,8 @@ export class ContactComponent implements OnInit {
             lng: position.coords.longitude
           };
           
-          // Convertir coordenadas a dirección legible
-          this.geocodeLatLng(pos);
+          // Convertir coordenadas a dirección legible usando Nominatim
+          this.reverseGeocode(pos);
         },
         (error) => {
           console.error('Error obteniendo la ubicación:', error);
@@ -135,17 +209,23 @@ export class ContactComponent implements OnInit {
     }
   }
   
-  private geocodeLatLng(location: any) {
-    this.geocoder.geocode({ 'location': location }, (results: any, status: any) => {
-      this.isLoadingMap = false;
-      
-      if (status === 'OK' && results[0]) {
-        this.originAddress = results[0].formatted_address;
-        this.map.setCenter(location);
-      } else {
+  private reverseGeocode(location: { lat: number, lng: number }) {
+    if (!this.isBrowser) return;
+
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.lat}&lon=${location.lng}`)
+      .then(response => response.json())
+      .then(data => {
+        this.isLoadingMap = false;
+        this.originAddress = data.display_name;
+        if (this.map) {
+          this.map.setView([location.lat, location.lng], 15);
+        }
+      })
+      .catch(error => {
+        console.error('Error en la geocodificación inversa:', error);
+        this.isLoadingMap = false;
         alert('No se pudo convertir tus coordenadas a una dirección legible.');
-      }
-    });
+      });
   }
   
   setTransportMode(mode: string) {
@@ -153,6 +233,8 @@ export class ContactComponent implements OnInit {
   }
   
   calculateRoute() {
+    if (!this.isBrowser) return;
+    
     if (!this.originAddress) {
       alert('Por favor ingresa tu ubicación de origen.');
       return;
@@ -161,33 +243,65 @@ export class ContactComponent implements OnInit {
     this.isLoadingMap = true;
     this.routeInfo = null;
     
-    const request = {
-      origin: this.originAddress,
-      destination: this.restaurantAddress,
-      travelMode: this.selectedMode
-    };
-    
-    this.directionsService.route(request, (result: any, status: any) => {
-      this.isLoadingMap = false;
-      
-      if (status === 'OK') {
-        this.directionsRenderer.setDirections(result);
-        this.processRouteInfo(result);
-      } else {
-        alert('No se pudo calcular la ruta: ' + status);
-      }
-    });
+    // Geocodificar la dirección de origen
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.originAddress)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          const origin: [number, number] = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+          const destination: [number, number] = [this.restaurantLocation.lat, this.restaurantLocation.lng];
+          
+          if (this.routingControl) {
+            // Limpiar ruta anterior
+            this.routingControl.setWaypoints([]);
+            
+            // Establecer nuevos waypoints
+            this.routingControl.setWaypoints([
+              this.L.latLng(origin[0], origin[1]),
+              this.L.latLng(destination[0], destination[1])
+            ]);
+
+            // Ajustar el mapa para mostrar toda la ruta
+            this.map?.fitBounds(this.L.latLngBounds([
+              [origin[0], origin[1]],
+              [destination[0], destination[1]]
+            ]), { padding: [50, 50] });
+          }
+        } else {
+          this.isLoadingMap = false;
+          alert('No se pudo encontrar la dirección de origen.');
+        }
+      })
+      .catch(error => {
+        console.error('Error en la geocodificación:', error);
+        this.isLoadingMap = false;
+        alert('Error al calcular la ruta. Por favor intenta nuevamente.');
+      });
   }
   
-  private processRouteInfo(result: any) {
-    const route = result.routes[0];
-    const leg = route.legs[0];
+  private formatDistance(meters: number): string {
+    if (meters >= 1000) {
+      return `${(meters / 1000).toFixed(1)} km`;
+    }
+    return `${Math.round(meters)} m`;
+  }
+  
+  private formatDuration(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     
-    this.routeInfo = {
-      distance: leg.distance.text,
-      duration: leg.duration.text,
-      steps: leg.steps.map((step: any) => step.instructions)
-    };
+    if (hours > 0) {
+      return `${hours} h ${minutes} min`;
+    }
+    return `${minutes} min`;
+  }
+  
+  private formatRouteSteps(instructions: any[]): string[] {
+    return instructions.map(instruction => {
+      const distance = this.formatDistance(instruction.distance);
+      const duration = this.formatDuration(instruction.time);
+      return `${instruction.text} (${distance}, ${duration})`;
+    });
   }
   
   async onSubmit() {
@@ -203,34 +317,20 @@ export class ContactComponent implements OnInit {
     this.formError = false;
     
     try {
-      // En realidad, esta parte debería hacerse en un backend por seguridad
-      // Implementación frontal solo para demostración
-      const { name, email, phone, message } = this.contactForm.value;
-      
-      const { data, error } = await this.resend.emails.send({
-        from: 'onboarding@resend.dev', // Usar un dominio verificado en producción
-        to: 'info@jaripeo-campestre.com', // Email del restaurante
-        subject: `Nuevo mensaje de contacto de ${name}`,
-        html: `
-          <h2>Nuevo mensaje de contacto</h2>
-          <p><strong>Nombre:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Teléfono:</strong> ${phone}</p>
-          <p><strong>Mensaje:</strong></p>
-          <p>${message}</p>
-        `,
-      });
-      
-      if (error) {
-        console.error('Error sending email:', error);
-        this.formError = true;
-      } else {
+      // Simulación de envío exitoso (en producción llamaría a un servicio real)
+      setTimeout(() => {
+        console.log('Formulario enviado:', this.contactForm.value);
         this.formSuccess = true;
         this.submitted = false;
         this.contactForm.reset();
-      }
+        
+        // Reset después de 5 segundos
+        setTimeout(() => {
+          this.formSuccess = false;
+        }, 5000);
+      }, 1500);
     } catch (err) {
-      console.error('Exception sending email:', err);
+      console.error('Error al enviar el formulario:', err);
       this.formError = true;
     }
   }
